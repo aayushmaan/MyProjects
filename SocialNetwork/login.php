@@ -14,9 +14,11 @@ if(isset($_POST['login'])) {
             echo $token;
             
             $user_id= DB::query('SELECT id from users WHERE username=:username',array(':username'=>$username))[0]['id'];
-            DB::query('INSERT into login_tokens VALUES(\'\',:token,:user_id)',array(':token'=>sha1($token),':user_id'=>$user_id));
+            DB::query('INSERT into login_tokens(token,user_id) VALUES(:token,:user_id)',array(':token'=>sha1($token),':user_id'=>$user_id));
             
             setcookie("SNID",$token,time()+60*60*24*7,'/',NULL,NULL,TRUE); //2nd last is true for https and for last javascript cannot access so protect from attacks
+            
+            setcookie("SNID_",'1',time()+60*60*24*3,'/',NULL,NULL,TRUE);
         }else{
             echo 'Wrong password';
         }
