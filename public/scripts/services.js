@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('myquizworkApp')
-.constant("baseURL", "https://localhost:3443/")
+.constant("baseURL", "")
 
 .factory('QNAFactory', ['$resource', 'baseURL', function ($resource, baseURL) {
     console.log("Factory");
