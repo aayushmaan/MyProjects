@@ -2,11 +2,8 @@
     font-family: 'Segoe UI', sans-serif;
     margin:auto;
     max-width:95%;
-    width:1000px;
-}
-
-*{
-    border-radius:0px !important;
+    
+    min-height:100%;
 }
 
 h1{
@@ -19,15 +16,14 @@ h2{
     font-weight:normal;
 }
 
+h3{
+    margin-left:10px;
+}
 hr{
     border:none;
     border-top:1px solid #ccc;
     background:none;
     margin-bottom:2px;
-}
-.header-right{
-    padding-top:12px;
-    text-align:right;
 }
 
 .center{
@@ -38,61 +34,82 @@ hr{
 }
 
 .question{
-    background-color:#eee;
+    /*background-color:#eee;*/
     color:#151569;
     min-height:300px;
-    padding:6px;
-    text-align:center;
+    text-align:left;
+    border: 1px solid;
+    border-radius: 16px;
 }
+
+.header-right{
+    padding:12px;
+    text-align:right;
+}
+
 .question h2{
     font-size:24px;
     font-weight:normal;
 }
 
 #quiz .options {
-    margin: auto;
+    margin-top:15px;
     max-width: 800px;
     text-align: left;
 }
+
+#quiz .subjective {
+    margin-top:15px;
+    max-width: 900px;
+    text-align: left;
+    padding-top: 6px;
+}
+
 #quiz .options > div{
     display:inline-block;
 }
-    #quiz .options > div > label {
-        background-color: #d0def6;
-        color: #224;
-        cursor: pointer;
-        display: block;
-        font-family: 'Segoe UI', Calibri, Arial;
-        font-weight:600;
-        margin: 5px;
-        text-align: left;
-        font-size: 18px;
-        margin: 10px;
-        min-width: 350px;
-        padding: 10px 15px;
-        vertical-align: middle;
-    }
 
-    #quiz .options input[type=checkbox] {
-        background-color:#eee;
-        border:1px solid #ccc;
-        height:22px;
-        width:22px;
-    }
+#quiz .option-box {
+     border-left: 1px solid;
+     min-height:300px;
+}
 
-    .quizNav {
-        margin:auto;
-        text-align:center;
-    }
-    .quizNav ul{
-        margin:0;
-    }
+#quiz .options > div > label {
+    /*background-color: #d0def6;*/
+    color: #224;
+    cursor: pointer;
+    display: block;
+    font-family: 'Segoe UI', Calibri, Arial;
+    font-weight:600;
+    margin: 5px;
+    text-align: left;
+    font-size: 18px;
+    margin: 10px;
+    min-width: 350px;
+    /*padding: 10px 15px;*/
+    vertical-align: middle;
+   
+}
+#quiz .options input[type=checkbox] {
+    background-color:#eee;
+    border:1px solid #ccc;
+    height:22px;
+    width:22px;
+}
+
+.quizNav {
+    margin:10px auto;
+    text-align:center;
+}
+.quizNav ul{
+    margin:0;
+}
 
 
-    .quizNav ul li{
-        display:inline-block;
-        list-style-type:none;
-    }
+.quizNav ul li{
+    display:inline-block;
+    list-style-type:none;
+}
     
 div.review{
     text-align:center;
@@ -186,6 +203,9 @@ div.review > div {
     background-color:#fff;
 }
 
+.create-quiz .subjective{
+    margin-left:20px;
+}
 .create-quiz .options > div{
     margin-left:20px;
 }
@@ -198,4 +218,16 @@ div.review > div {
     padding:0;
     width:20px;
     -webkit-appearance:checkbox;    
+}
+
+.create-quiz .points{
+    background-color:#eee;
+    color:#151569;
+    width:200px;
+    margin:20px;
+    padding:6px;
+    text-align:center;
+    font-size:15px;
+    font-weight:boldfont-size:24px;
+    font-weight:normal;quiz ;
 }

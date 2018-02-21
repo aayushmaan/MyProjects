@@ -36,7 +36,17 @@ var questionSchema = new Schema({
         type: Number
     },
     options: [optionSchema],
+    subjective:{
+        type: String,
+        trim: true
+    },
     points: {
+        type:Number
+    },
+    isSubjective: {
+        type:Boolean
+    },
+    time:{
         type:Number
     }
     }, {

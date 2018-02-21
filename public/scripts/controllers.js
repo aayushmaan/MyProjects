@@ -79,7 +79,7 @@ angular.module('myquizworkApp')
 }])
 
 
-.controller('quizCtrl',['$scope', '$http','QNAFactory',function ($scope, $http,QNAFactory) {
+.controller('quizCtrl',['$scope', '$http', '$timeout', '$filter', 'QNAFactory',function ($scope, $http, $timeout, $filter, QNAFactory) {
     $scope.quizName = 'data/csharp.js';
 
     //Note: Only those configs are functional which is documented at: http://www.codeproject.com/Articles/860024/Quiz-Application-in-AngularJs
@@ -93,7 +93,7 @@ angular.module('myquizworkApp')
         'requiredAll': false,  // indicates if you must answer all the questions before submitting.
         'richText': false,
         'shuffleQuestions': false,
-        'shuffleOptions': false,
+        'shuffleOptions': true,
         'showClock': false,
         'showPager': true,
         'theme': 'none'
@@ -126,16 +126,13 @@ angular.module('myquizworkApp')
         $scope.questions.forEach(function (q) {
             answers.push({ 'QuestionId': q.Id, 'Answered': q.Answered });
         });
-        // Post your data to the server here. answers contains the questionId and the users' answer.
-        //$http.post('api/Quiz/Submit', answers).success(function (data, status) {
-        //    alert(data);
-        //});
+        
         console.log($scope.questions);
         $scope.result = 0;
         $scope.questions.forEach(function(question){
             var points = question.points;
             question.options.forEach(function (option) {
-            if (toBool(option.Selected) === option.IsAnswer) {
+            if (option.Selected !== undefined && toBool(option.Selected) === option.isAnswer) {
                 $scope.result = $scope.result + points;}
             });
             });
@@ -167,18 +164,34 @@ angular.module('myquizworkApp')
         });
     };
     
+    $scope.shuffleQuestions = function (array) {
+        var currentIndex = array.length, temp, randomIndex;
+
+        while (0 !== currentIndex) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            temp = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temp;
+        }
+        return array;
+    }
+    
     QNAFactory.query(
         function (res) {
              $scope.config = $scope.defaultConfig;
             
-             $scope.questions = res; //$scope.config.shuffleQuestions ? helper.shuffle(res.data.questions) : res.data.questions;
+             $scope.questions = $scope.config.shuffleQuestions ? $scope.shuffleQuestions(res) : res;
              $scope.totalItems = $scope.questions.length;
              $scope.itemsPerPage = $scope.config.pageSize;
              $scope.currentPage = 1;
              $scope.mode = 'quiz';
              if($scope.config.shuffleOptions)
              {$scope.shuffleOptions();}
-             
+             var min= $scope.questions[$scope.totalItems - 1].time;
+             $scope.examTimer(min);
+            
              $scope.$watch('currentPage + itemsPerPage', function () {
                  var begin = (($scope.currentPage - 1) * $scope.itemsPerPage);
                    var end = begin + $scope.itemsPerPage;
@@ -221,6 +234,67 @@ angular.module('myquizworkApp')
             }
         });
         return result;
+    };
+    
+    /*
+    Timer Code
+    */
+    
+    $scope.examTimer = function (min){
+           
+          var startTime = new Date();
+          var start = new Date();
+          start.setMinutes(min);
+          start.setSeconds(0);
+          //startTime = $filter('date')(startTime, "mm::ss");
+          var timeoutId;
+
+          function updateTime() {
+            $scope.timeTaken = start - (new Date() - startTime);
+            $scope.timer = $filter('date')($scope.timeTaken, "mm::ss");
+            if($scope.timer.split("::")[0] === "00" && $scope.timer.split("::")[1] === "00"){
+                $scope.onSubmit();
+            }
+              return true;
+          }
+
+          function updateLater() {
+            timeoutId = $timeout(function() {
+              updateTime();
+              updateLater();
+            }, 1000);
+          }
+
+          /*element.bind('$destroy', function() {
+            $timeout.cancel(timeoutId);
+          });*/
+
+          updateTime();
+          updateLater();
+        /*while(parseInt(min)>=0) {
+            if (parseInt(sec) >0) {
+
+                sec = parseInt(sec) - 1;                
+            }
+            else {
+
+                if (parseInt(min)==0 && parseInt(sec)==0){
+                     alert("Time Up");
+                     $scope.mode = 'result';
+                 }
+                if (parseInt(sec) == 0) {									
+                    min = parseInt(min) - 1;
+                    //$scope.minutes = min;
+                    sec=59;
+
+                }
+
+            }
+            $scope.mminutes=min;            
+            $scope.sseconds = sec;
+            min=min-1;
+            sec=sec-1;
+        }*/
     };
 }])
 
@@ -270,8 +344,7 @@ angular.module('myquizworkApp')
              $scope.questions = res.data.questions;
              $scope.totalItems = $scope.questions.length;
              //$scope.currentPage = 1;
-             $scope.mode = 'quiz';
-            
+             $scope.mode = 'quiz';            
              $scope.$watch('currentPage + itemsPerPage', function () {
                  var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
                    end = begin + $scope.itemsPerPage;
@@ -283,6 +356,7 @@ angular.module('myquizworkApp')
         }
               );
     };
+    
     $scope.loadQuiz($scope.quizName);
 
     $scope.isAnswered = function (index) {
@@ -295,7 +369,7 @@ angular.module('myquizworkApp')
         });
         return answered;
     };
-
+    
     $scope.isCorrect = function (question) {
         var result = 'correct';
         var options = question.options || [];

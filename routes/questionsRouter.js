@@ -20,7 +20,7 @@ questionsRouter.route('/')
     });
 })
 
-    .post(Verify.verifyOrdinaryUser, function (req, res, next) {
+    .post(Verify.verifyOrdinaryUser, Verify.verifyAdmin, function (req, res, next) {
     console.log("got it");
     Questions.create(req.body, function (err, question) {
         if (err) next(err);
@@ -29,7 +29,7 @@ questionsRouter.route('/')
             'Content-Type': 'text/plain'
         });
 
-        res.end('Added the dish with id: ');
+        res.end('Added the question');
     });
 })
     

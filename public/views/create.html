@@ -2,31 +2,38 @@
 <div class="header">
     <div class="row">
         <div class="col-md-8">
-            <h2>Create Quiz Application</h2>
+            <h2>Create Quiz</h2>
         </div>
         <div class="col-md-4 header-right">
-            <!-- In actual application, you may wish to load the quiz List using angular service. -->
             
         </div>
     </div>
     <hr />
 </div>
 <div id="createQuiz" class="create-quiz">
-    <hr />
     <div ng-show="mode=='quiz'">
         <div ng-repeat="question in filteredQuestions">
             <div class="label label-warning">Question {{currentPage}} of {{totalItems}}.</div>
             <div class="question">
-                <h3>{{currentPage}}. <input type="text" ng-model="question.name" /></h3>
+                <h3>{{currentPage}}. <input type="text" ng-model="question.name" placeholder="<Add Question Here>"/></h3>
                 <div class="options">
+                        <label for="subjective" class="subjective">
+                        <input type="checkbox" ng-model="question.isSubjective" ng-toggle="onSelectSub();"/>
+                        Subjective Question
+                        </label>
+                </div>
+                <div class="options" ng-show="!question.isSubjective">
                     <div ng-repeat="option in question.options">
                         <input id="{{option.id}}" type="checkbox" ng-model="option.isAnswer" />
-                        <input type="text" ng-model="option.name" />
+                        <input type="text" ng-model="option.name" placeholder="<Add Option Here>"/>
                     </div>
                 </div>
-                <div class="points">
-                    Points: <input type="text" ng-model="question.points" />
+                <div class="points" ng-show="!question.isSubjective">
+                    Points: <input type="text" ng-model="question.points" maxlength="20"/>
                 </div>
+                <div class="col-md-12 points">
+                    Time(in minutes): <input type="text" ng-model="question.time" maxlength="20"/>
+                <div>
             </div>
         </div>
         <hr />
@@ -57,5 +64,4 @@
         </div>
         <h4 class="alert alert-info text-center">You may close this window now.</h4>
     </div>
-    <hr />
 </div>

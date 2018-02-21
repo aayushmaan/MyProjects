@@ -4,27 +4,36 @@
         <div class="col-md-8">
             <h2>Quiz Application</h2>
         </div>
-        <div class="col-md-4 header-right">
-            <!-- In actual application, you may wish to load the quiz List using angular service. -->
-            Time: <h1><timer countdown="10041" max-time-unit="'minute'" interval="1000">{{mminutes}}:{{minutesS}}:{{sseconds}}:{{secondsS}}</timer></h1>
-        </div>
+        <div class="col-md-4 header-right" ng-hide="mode=='result'">
+        <span><bold>Time:</bold></span>  {{timer}}
+        
+    </div>
     </div>
     <hr />
 </div>
 <div id="quiz">
-    <h1 class="center">{{quiz.name}}</h1>
-    <hr />
     <div ng-show="mode=='quiz'">
+        
         <div ng-repeat="question in filteredQuestions">
-            <div class="label label-warning">Question {{currentPage}} of {{totalItems}}.</div>
-            <div class="question">
+            <div class="col-md-12 label label-warning">Question {{currentPage}} of {{totalItems}}.</div>
+            <div class="col-md-12 question">
+                <div class="col-md-6">
                 <h2>{{currentPage}}. <span ng-bind="question.name"></span></h2>
-                <div class="options">
-                    <div ng-repeat="option in question.options">
-                        <label for="{{option.Id}}">
-                            <input id="{{option.Id}}" type="checkbox" ng-model="option.Selected" ng-click="onSelect(question, option);"/>
-                            {{option.name}}
-                        </label>
+                </div>
+                <div class="col-md-6 option-box" ng-show="!question.isSubjective">
+                    <div class="options">
+                        <div ng-repeat="option in question.options">
+                            <label for="{{option.Id}}">
+                                <input id="{{option.Id}}" type="checkbox" ng-model="option.Selected" ng-click="onSelect(question, option);"/>
+                                {{option.name}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 option-box" ng-show="question.isSubjective">
+                    <div class="subjective" >
+                            <textarea rows="10" cols="100" ng-model="question.subjective">
+                                </textarea>
                     </div>
                 </div>
             </div>
